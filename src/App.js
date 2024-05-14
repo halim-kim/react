@@ -28,10 +28,10 @@ function Board( {xIsNext, squares, onPlay}) {
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
-    status = 'Winner: ' + winner;
+    status = '勝者: ' + winner;
   }
   else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+    status = '次のプレーヤー: ' + (xIsNext ? 'X' : 'O');
   }
 
   return (
@@ -96,17 +96,25 @@ export default function Game() {
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
-      description = 'Go to move #' + move;
+      description = '指し手 #' + move + 'に戻る';
     } else {
-      description = 'Go to game start';
+      description = 'ゲームのリセット';
     }
+    const clearGameInfo = () => {
+      if (move === 0) {
+        setHistory([Array(9).fill(null)]);
+        setCurrentMove(0);
+      }
+    };
     return (
       <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+        <button onClick={() => {
+          jumpTo(move);
+          clearGameInfo();
+        }}>{description}</button>
       </li>
     );
   });
-
   return (
     <div className="game">
       <div className="game-board">
